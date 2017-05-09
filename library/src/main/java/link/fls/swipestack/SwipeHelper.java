@@ -17,6 +17,8 @@
 package link.fls.swipestack;
 
 import android.animation.Animator;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
@@ -66,14 +68,21 @@ public class SwipeHelper implements View.OnTouchListener {
 
                 float dx = event.getX(pointerIndex) - mDownX;
                 float dy = event.getY(pointerIndex) - mDownY;
+                Log.e("NJW", "abs valuedx=" + Math.abs(dx));
+                Log.e("NJW", "abs value dy=" + Math.abs(dy));
 
                 float newX = mObservedView.getX() + dx;
                 float newY = mObservedView.getY() + dy;
 
                 mObservedView.setX(newX);
-                mObservedView.setY(newY);
+               // mObservedView.setY(newY);
+                //works to just comment out the above line.(except jiggles from slop)
 
                 float dragDistanceX = newX - mInitialX;
+                Log.e("NJW", "dragDistanceX" + Math.abs(dragDistanceX));
+                View parent = (View) mSwipeStack.getParent();
+                parent.scrollBy(0, Math.round(dy)); //TODO: dpTOPix
+
                 float swipeProgress = Math.min(Math.max(
                         dragDistanceX / mSwipeStack.getWidth(), -1), 1);
 
