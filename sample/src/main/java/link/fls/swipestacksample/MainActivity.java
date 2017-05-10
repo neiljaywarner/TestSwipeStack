@@ -66,9 +66,9 @@ public class MainActivity extends AppCompatActivity  {
 
         fillWithTestData();
 
-       //LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        StackLayoutManager layoutManager = new StackLayoutManager();
-        //layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+       LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        //StackLayoutManager layoutManager = new StackLayoutManager();
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mSwipeStack.setAdapter(new MYRecyclerVIewAdapter(mData));
         mSwipeStack.setLayoutManager(layoutManager);
 
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity  {
 
     private void fillWithTestData() {
         for (int x = 0; x < 5; x++) {
-            mData.add(getString(R.string.dummy_text) + " " + (x + 1));
+            mData.add(" " + (x + 1));
         }
     }
 

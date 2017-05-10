@@ -10,7 +10,7 @@ import android.view.View;
 
 public class StackLayoutManager extends RecyclerView.LayoutManager{
 
-    private int verticalScrollOffset = 100;
+    private int verticalScrollOffset = 1;
 
     @Override
     public RecyclerView.LayoutParams generateDefaultLayoutParams() {
@@ -35,6 +35,7 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
     */
 
     Rect[] layoutInfo = {
+            new Rect(74,74,247,976),
             new Rect(289,74,462,976),
             new Rect(504,74,677,976),
             new Rect(719,74,892,976)

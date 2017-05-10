@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_margin="8dp"
+    android:background="@android:color/holo_blue_light"
+    android:id="@+id/textViewCard"
+    android:layout_width="50dp"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:textSize="44sp"
+    android:text="@string/dummy_text"/>
+<!--
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -19,4 +30,8 @@
         android:textSize="44sp"
         android:text="@string/dummy_text"/>
 
+
+
 </android.support.v7.widget.CardView>
+
+    -->
