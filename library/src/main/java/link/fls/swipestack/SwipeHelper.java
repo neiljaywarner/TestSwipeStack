@@ -35,6 +35,8 @@ public class SwipeHelper implements View.OnTouchListener {
     private boolean mListenForTouchEvents;
     private float mDownX;
     private float mDownY;
+    private float mUpX;
+    private float mUpY;
     private float mInitialX;
     private float mInitialY;
     private int mPointerId;
@@ -51,12 +53,36 @@ public class SwipeHelper implements View.OnTouchListener {
     public boolean onTouch(View v, MotionEvent event) {
 
         switch (event.getAction()) {
+            case MotionEvent.ACTION_CANCEL:
+                Log.e("NJW", "SwipeHelperaction cancel");
+                //can swipe now b/c
+                mPointerId = event.getPointerId(0);
+
+                mUpX = event.getX(mPointerId);
+                mUpY = event.getY(mPointerId);
+                float scrolledX = Math.abs(mUpX - mDownX);
+                float scrolledY = Math.abs(mUpY - mDownY);
+
+                Log.e("NJW","--->dx/dy=" + scrolledX + "/" + scrolledY);
+
+                if (scrolledY > scrolledX) {
+                    Log.e("NJW", "--->dy>dx, scroll parent: dptoPix(dy)" + dpToPx(scrolledY));
+                    View parent = (View) mSwipeStack.getParent();
+                    //mSwipeStack.scrollBy(0, dpToPx(scrolledY)); //TODO: dpTOPix
+                    ((View) mSwipeStack.getParent().getParent()).scrollBy(0, dpToPx(scrolledY));
+                    return true;
+                    //?? Is this a good idea?
+                }
+                break;
             case MotionEvent.ACTION_DOWN:
+                Log.e("NJW", "SwipeHelperaction DOWN");
+
                 if(!mListenForTouchEvents || !mSwipeStack.isEnabled()) {
                     return false;
                 }
 
                 //v.getParent().requestDisallowInterceptTouchEvent(true);
+                // ----_> Put this back in if we dn't use a custom viewgroup or custom behaviour that needs to intercept.
                 mSwipeStack.onSwipeStart();
                 mPointerId = event.getPointerId(0);
                 mDownX = event.getX(mPointerId);
@@ -72,17 +98,8 @@ public class SwipeHelper implements View.OnTouchListener {
 
                 float dx = event.getX(pointerIndex) - mDownX;
                 float dy = event.getY(pointerIndex) - mDownY;
-                Log.e("NJW","--->dy=" + dy);
 
-                if (Math.abs(dy) > Math.abs(dx)) {
-                    Log.e("NJW", "--->dy>dx, scroll parent: dptoPix(dy)" + dpToPx(dy));
-                    View parent = (View) mSwipeStack.getParent();
-                    mSwipeStack.scrollBy(0, dpToPx(dy)); //TODO: dpTOPix
-                    return true;
-                    //?? Is this a good idea?
-                }
-                Log.e("NJW", "-->abs valuedx=" + Math.abs(dx));
-                Log.e("NJW", "abs value dy=" + Math.abs(dy));
+
 
                 float newX = mObservedView.getX() + dx;
                 float newY = mObservedView.getY() + dy;
@@ -129,12 +146,14 @@ public class SwipeHelper implements View.OnTouchListener {
     // for consistency? Maybe ask in PR... reaedability is not as good imho
     private int dpToPx(float dy) {
         /// Converts 14 dip into its equivalent px
-
+        /*
         Resources r = mSwipeStack.getResources();
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dy, r.getDisplayMetrics());
         //NOTE: Rounding is OK because it is for ScrollTo.
         // scrollParentDp() method Might even be a good idea
         return Math.round(px);
+        */
+        return Math.round(dy);
     }
 
     private void checkViewPosition() {
