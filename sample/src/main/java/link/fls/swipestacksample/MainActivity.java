@@ -66,9 +66,10 @@ public class MainActivity extends AppCompatActivity  {
 
         fillWithTestData();
 
-       LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        //StackLayoutManager layoutManager = new StackLayoutManager();
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        StackLayoutManager layoutManager = new StackLayoutManager();
+
+        // LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        //layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mSwipeStack.setAdapter(new MYRecyclerVIewAdapter(mData));
         mSwipeStack.setLayoutManager(layoutManager);
 

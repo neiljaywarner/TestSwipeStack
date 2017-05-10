@@ -35,11 +35,15 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
     */
 
     Rect[] layoutInfo = {
-            new Rect(74,74,247,976),
-            new Rect(289,74,462,976),
-            new Rect(504,74,677,976),
-            new Rect(719,74,892,976)
+            new Rect(74,74,205,976),
+            new Rect(247,74,378,976),
+            new Rect(420,74,551,976),
+            new Rect(593,74,724,976),
+            new Rect(766,74,897,976)
 
+
+
+            //Note: perhaps the last one isnt' visible?
     };
 
     private void fillVisibleChildren(RecyclerView.Recycler recycler){
@@ -63,6 +67,8 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
     **according to the initial left top corner, before any scrolling.
     */
     private boolean isVisible(int index) {
+        //Note: perhaps the last one isnt' visible?
+
         return true;
     }
 
