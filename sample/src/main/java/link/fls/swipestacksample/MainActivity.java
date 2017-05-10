@@ -22,9 +22,11 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -72,6 +74,55 @@ public class MainActivity extends AppCompatActivity implements SwipeStack.SwipeS
         for (int x = 0; x < 5; x++) {
             mData.add(getString(R.string.dummy_text) + " " + (x + 1));
         }
+    }
+
+
+    //Hint from Stackoverflow post where I put bounty
+    // been meaning to try it...
+
+
+    // So I can use dispatchTouchEvent somewhere besides the activity if i want to..
+    /*
+    Touch Events propagates as
+
+Activity.dispatchTouchEvent()
+ViewGroup.dispatchTouchEvent()
+View.dispatchTouchEvent()
+View.onTouchEvent()
+ViewGroup.onTouchEvent()
+Activity.onTouchEvent()
+If you use GestureDetector inside your Activity's dispatchTouchEvent() method you will be able to consume or propagate event to ViewGroups or Views correctly.
+
+
+
+     */
+
+    float mDownX,mDownY;
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        Log.e("NJW", "Fixing to dispatch:" + MotionEvent.actionToString(ev.getAction()));
+        boolean shouldDispatch;
+        //TODO: Build an array
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                Log.e("NJW", "Dispatch-down");
+                setTitle("Down:" + ev.getY());
+                break;
+            case MotionEvent.ACTION_MOVE:
+                Log.e("NJW", "Dispatch-move");
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                Log.e("NJW", "Dispatch-cancel");
+                setTitle(getTitle().toString() + "...Cancel" + ev.getY());
+
+                break;
+
+        }
+        // e.g. dispatch if true/false...
+
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override

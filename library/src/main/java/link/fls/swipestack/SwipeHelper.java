@@ -17,6 +17,7 @@
 package link.fls.swipestack;
 
 import android.animation.Animator;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
@@ -45,7 +46,7 @@ public class SwipeHelper implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-
+        Log.e("NJW", "SwipeHelper.Event=" + MotionEvent.actionToString(event.getAction()));
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if(!mListenForTouchEvents || !mSwipeStack.isEnabled()) {
