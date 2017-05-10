@@ -22,6 +22,10 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,13 +42,13 @@ import java.util.List;
 
 import link.fls.swipestack.SwipeStack;
 
-public class MainActivity extends AppCompatActivity implements SwipeStack.SwipeStackListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity  {
 
     private Button mButtonLeft, mButtonRight;
     private FloatingActionButton mFab;
 
     private ArrayList<String> mData;
-    private SwipeStack mSwipeStack;
+    private RecyclerView mSwipeStack;
     private SwipeStackAdapter mAdapter;
 
     @Override
@@ -51,21 +56,49 @@ public class MainActivity extends AppCompatActivity implements SwipeStack.SwipeS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSwipeStack = (SwipeStack) findViewById(R.id.swipeStack);
-        mButtonLeft = (Button) findViewById(R.id.buttonSwipeLeft);
-        mButtonRight = (Button) findViewById(R.id.buttonSwipeRight);
-        mFab = (FloatingActionButton) findViewById(R.id.fabAdd);
 
-        mButtonLeft.setOnClickListener(this);
-        mButtonRight.setOnClickListener(this);
-        mFab.setOnClickListener(this);
+        mSwipeStack = (RecyclerView) findViewById(R.id.swipeStack);
+
+
+
 
         mData = new ArrayList<>();
-        mAdapter = new SwipeStackAdapter(mData);
-        mSwipeStack.setAdapter(mAdapter);
-        mSwipeStack.setListener(this);
 
         fillWithTestData();
+
+        LinearLayoutManager linearLayoutManger = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManger.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mSwipeStack.setAdapter(new MYRecyclerVIewAdapter(mData));
+        mSwipeStack.setLayoutManager(linearLayoutManger);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+     //   mSwipeStack.setHasFixedSize(true);
+
+        //This might help if we get themn to stack on top of each other
+        /*
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
+                new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                        Log.e("NJW", "onMove of recyclerView... targetViewHolder...");
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                        Log.e("NJW", "onswipe of recyclerView... targetViewHolder...");
+
+                        /// put it at the beignning and refresh.
+                        //items.remove(viewHolder.getAdapterPosition());
+                        //adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                    }
+                };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+       // itemTouchHelper.attachToRecyclerView(mSwipeStack);
+       */
+
     }
 
     private void fillWithTestData() {
@@ -74,17 +107,7 @@ public class MainActivity extends AppCompatActivity implements SwipeStack.SwipeS
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.equals(mButtonLeft)) {
-            mSwipeStack.swipeTopViewToLeft();
-        } else if (v.equals(mButtonRight)) {
-            mSwipeStack.swipeTopViewToRight();
-        } else if (v.equals(mFab)) {
-            mData.add(getString(R.string.dummy_fab));
-            mAdapter.notifyDataSetChanged();
-        }
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -98,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements SwipeStack.SwipeS
 
         switch (item.getItemId()) {
             case R.id.menuReset:
-                mSwipeStack.resetStack();
                 Snackbar.make(mFab, R.string.stack_reset, Snackbar.LENGTH_SHORT).show();
                 return true;
             case R.id.menuGitHub:
@@ -110,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements SwipeStack.SwipeS
 
         return super.onOptionsItemSelected(item);
     }
-
+/*
     @Override
     public void onViewSwipedToRight(int position) {
         String swipedElement = mAdapter.getItem(position);
@@ -124,12 +146,10 @@ public class MainActivity extends AppCompatActivity implements SwipeStack.SwipeS
         Toast.makeText(this, getString(R.string.view_swiped_left, swipedElement),
                 Toast.LENGTH_SHORT).show();
     }
+    */
 
-    @Override
-    public void onStackEmpty() {
-        Toast.makeText(this, R.string.stack_empty, Toast.LENGTH_SHORT).show();
-    }
 
+    //TODO: Remove
     public class SwipeStackAdapter extends BaseAdapter {
 
         private List<String> mData;
