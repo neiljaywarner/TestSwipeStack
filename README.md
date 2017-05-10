@@ -1,4 +1,8 @@
 # SwipeStack
+
+(Pulled from https://github.com/flschweiger/SwipeStack) to try to address the issue with swiping vertically within parent control
+
+
 A simple, customizable and easy to use swipeable view stack for Android.
 
 [![Download](https://api.bintray.com/packages/flschweiger/maven/swipestack/images/download.svg) ](https://bintray.com/flschweiger/maven/swipestack/_latestVersion) 

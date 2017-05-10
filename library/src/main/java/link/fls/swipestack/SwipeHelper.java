@@ -17,7 +17,9 @@
 package link.fls.swipestack;
 
 import android.animation.Animator;
+import android.content.res.Resources;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,7 +56,7 @@ public class SwipeHelper implements View.OnTouchListener {
                     return false;
                 }
 
-                v.getParent().requestDisallowInterceptTouchEvent(true);
+                //v.getParent().requestDisallowInterceptTouchEvent(true);
                 mSwipeStack.onSwipeStart();
                 mPointerId = event.getPointerId(0);
                 mDownX = event.getX(mPointerId);
@@ -63,12 +65,23 @@ public class SwipeHelper implements View.OnTouchListener {
                 return true;
 
             case MotionEvent.ACTION_MOVE:
+                Log.e("NJW", "SwipeHelperaction_move");
+
                 int pointerIndex = event.findPointerIndex(mPointerId);
                 if (pointerIndex < 0) return false;
 
                 float dx = event.getX(pointerIndex) - mDownX;
                 float dy = event.getY(pointerIndex) - mDownY;
-                Log.e("NJW", "abs valuedx=" + Math.abs(dx));
+                Log.e("NJW","--->dy=" + dy);
+
+                if (Math.abs(dy) > Math.abs(dx)) {
+                    Log.e("NJW", "--->dy>dx, scroll parent: dptoPix(dy)" + dpToPx(dy));
+                    View parent = (View) mSwipeStack.getParent();
+                    mSwipeStack.scrollBy(0, dpToPx(dy)); //TODO: dpTOPix
+                    return true;
+                    //?? Is this a good idea?
+                }
+                Log.e("NJW", "-->abs valuedx=" + Math.abs(dx));
                 Log.e("NJW", "abs value dy=" + Math.abs(dy));
 
                 float newX = mObservedView.getX() + dx;
@@ -80,8 +93,7 @@ public class SwipeHelper implements View.OnTouchListener {
 
                 float dragDistanceX = newX - mInitialX;
                 Log.e("NJW", "dragDistanceX" + Math.abs(dragDistanceX));
-                View parent = (View) mSwipeStack.getParent();
-                parent.scrollBy(0, Math.round(dy)); //TODO: dpTOPix
+
 
                 float swipeProgress = Math.min(Math.max(
                         dragDistanceX / mSwipeStack.getWidth(), -1), 1);
@@ -101,7 +113,8 @@ public class SwipeHelper implements View.OnTouchListener {
                 return true;
 
             case MotionEvent.ACTION_UP:
-                v.getParent().requestDisallowInterceptTouchEvent(false);
+                Log.e("NJW", "SwipeHelperaction_up, about to onSwipeEnd, whihc i can modify");
+                //v.getParent().requestDisallowInterceptTouchEvent(false);
                 mSwipeStack.onSwipeEnd();
                 checkViewPosition();
 
@@ -110,6 +123,18 @@ public class SwipeHelper implements View.OnTouchListener {
         }
 
         return false;
+    }
+
+    //TODO: Consider if it's  good idea to use constant scale value like in circularProgressBar in subway app from Praveen
+    // for consistency? Maybe ask in PR... reaedability is not as good imho
+    private int dpToPx(float dy) {
+        /// Converts 14 dip into its equivalent px
+
+        Resources r = mSwipeStack.getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dy, r.getDisplayMetrics());
+        //NOTE: Rounding is OK because it is for ScrollTo.
+        // scrollParentDp() method Might even be a good idea
+        return Math.round(px);
     }
 
     private void checkViewPosition() {

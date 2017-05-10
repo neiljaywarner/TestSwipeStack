@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SwipeStack Demo</string>
+    <string name="app_name">A SwipeStack Demo</string>
 
     <string name="swipe_left">Swipe left</string>
     <string name="swipe_right">Swipe right</string>
