@@ -66,10 +66,20 @@ public class MainActivity extends AppCompatActivity  {
 
         fillWithTestData();
 
-        LinearLayoutManager linearLayoutManger = new LinearLayoutManager(getApplicationContext());
-        linearLayoutManger.setOrientation(LinearLayoutManager.HORIZONTAL);
+       //LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        StackLayoutManager layoutManager = new StackLayoutManager();
+        //layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mSwipeStack.setAdapter(new MYRecyclerVIewAdapter(mData));
-        mSwipeStack.setLayoutManager(linearLayoutManger);
+        mSwipeStack.setLayoutManager(layoutManager);
+
+
+        ((Button) findViewById(R.id.buttonSwipeLeft)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                log(mSwipeStack);
+
+            }
+        });
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -99,6 +109,21 @@ public class MainActivity extends AppCompatActivity  {
        // itemTouchHelper.attachToRecyclerView(mSwipeStack);
        */
 
+    }
+
+    private void log(RecyclerView stack) {
+        Log.e("NJW", "log: count=" + stack.getChildCount());
+        for (int i=0; i < stack.getChildCount(); i++) {
+            View view = stack.getChildAt(i);
+            Log.e("NJW", "START----" + i + "-----/>");
+
+            Log.e("NJW", "l,t,r,b");
+            Log.e("NJW", "" + view.getLeft() + "," + view.getTop() + "," + view.getRight() + "," + view.getBottom());
+
+            Log.e("NJW", "END----" + i + "-----/>");
+
+
+        }
     }
 
     private void fillWithTestData() {

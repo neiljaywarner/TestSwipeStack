@@ -17,17 +17,15 @@
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:text="@string/swipe_left"/>
+
+        android:text="Logcat Positions"/>
 
     <Button
         android:id="@+id/buttonSwipeRight"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+
         android:text="@string/swipe_right"/>
 
 
