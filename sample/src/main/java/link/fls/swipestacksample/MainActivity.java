@@ -82,6 +82,30 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
+        ((Button) findViewById(R.id.buttonSwipeRight)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSwipeStack.scrollToPosition(3);
+
+            }
+        });
+
+        mSwipeStack.setNestedScrollingEnabled(true);
+        mSwipeStack.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                 Log.d("NJW", "onScrollstatechanged");
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                Log.d("NJW", "onScrolled");
+
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+
+
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
      //   mSwipeStack.setHasFixedSize(true);

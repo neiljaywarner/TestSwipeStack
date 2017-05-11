@@ -14,6 +14,8 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
     private int verticalScrollOffset = 1;
     private int horizontalScrollOffset = 0;
 
+    public static final String TAG = "SLM";
+
     @Override
     public RecyclerView.LayoutParams generateDefaultLayoutParams() {
         return new RecyclerView.LayoutParams(
@@ -21,10 +23,15 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
                 RecyclerView.LayoutParams.WRAP_CONTENT);
     }
 
+
+
+
     @Override
     public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+        //also checkout http://wiresareobsolete.com/2014/09/building-a-recyclerview-layoutmanager-part-1/
         fillVisibleChildren(recycler);
     }
+
 
 
     /// *** These values are with LinearLayoutManager horizontal orientation
@@ -49,22 +56,28 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
     };
 
     private void fillVisibleChildren(RecyclerView.Recycler recycler){
+        fillVisibleChildren(recycler, 0);
+    }
+   // when scorlling, change pos plus or minus... maybe record it in a member variable
+    public void fillVisibleChildren(RecyclerView.Recycler recycler, int top) {
+        Log.d(TAG, "fill start with:" + top);
         //before we layout child views, we first scrap all current attached views
+
         detachAndScrapAttachedViews(recycler);
 
         //layoutInfo is a Rect[], each element contains coordinates for a view.
-        for(int i = 0; i < layoutInfo.length; i++){
+
+        //TODO: Change to do while so it can circle around
+        for(int i = top; i < layoutInfo.length; i++){
             if(isVisible(i)){
                 View view = recycler.getViewForPosition(i);
                 addView(view);
                 layoutDecorated(view, layoutInfo[i].left, layoutInfo[i].top - verticalScrollOffset,
                         layoutInfo[i].right, layoutInfo[i].bottom - verticalScrollOffset);
             }
-        }
-    }
-   // when scorlling, change pos plus or minus... maybe record it in a member variable
-    public void fillVisibileChildren(RecyclerView.Recycler recycler, int pos) {
 
+
+        }
     }
 
     /*determine whether a child view is now visible
@@ -84,6 +97,7 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
 
     @Override
     public boolean canScrollHorizontally() {
+        Log.d(TAG, "CanscrollHorizontally=true");
         return true;
     }
 
@@ -94,11 +108,19 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
 
     @Override
     public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        Log.d("NJW", "dx=" + dx);
+        Log.d(TAG, "dx=" + dx);
         if (dx < 0) {
-            Log.d("NJW", "scrolling left");
+            Log.d(TAG, "scrolling left");
         } else {
-            Log.d("NJW", "scrolling right");
+            Log.d(TAG, "scrolling right");
+        }
+
+        if (state.didStructureChange()) {
+            Log.d(TAG, "Structure changed");
+        }
+        
+        if (state.isPreLayout()) {
+            Log.d(TAG, "isPreLayout");
         }
 
         int travel;
@@ -119,7 +141,11 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
             horizontalScrollOffset += dx;
         }
         */
-        fillVisibleChildren(recycler);
+
+        fillVisibleChildren(recycler, 2);
+        //requestLayout();
+
+        //moveView(0,2);
         /*
         @return The actual distance scrolled. The return value will be negative if dx was
          * negative and scrolling proceeeded in that direction.
@@ -141,6 +167,9 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
         View thisView = this.getChildAt(getChildCount()-1);
         return  thisView.getRight();
     }
+
+
+
 
     // had to fill out several functions that they didn't do for us
 
