@@ -2,6 +2,7 @@ package link.fls.swipestacksample;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -61,6 +62,10 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
             }
         }
     }
+   // when scorlling, change pos plus or minus... maybe record it in a member variable
+    public void fillVisibileChildren(RecyclerView.Recycler recycler, int pos) {
+
+    }
 
     /*determine whether a child view is now visible
     **getVerticalSpace() and getHorizontalSpace() returns layout space minus paddings.
@@ -89,10 +94,18 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
 
     @Override
     public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        Log.d("NJW", "dx=" + dx);
+        if (dx < 0) {
+            Log.d("NJW", "scrolling left");
+        } else {
+            Log.d("NJW", "scrolling right");
+        }
+
         int travel;
         final int leftLimit = 0;
         final int rightLimit = findRightLimit(); //a helper method to find the rightmost child's right side.
         //-----> TODO: Modify this
+        /*
         if(dx + horizontalScrollOffset < leftLimit){
             travel = horizontalScrollOffset;
             horizontalScrollOffset = leftLimit;
@@ -105,8 +118,16 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
             travel = dx;
             horizontalScrollOffset += dx;
         }
+        */
         fillVisibleChildren(recycler);
-        return travel;
+        /*
+        @return The actual distance scrolled. The return value will be negative if dx was
+         * negative and scrolling proceeeded in that direction.
+         * <code>Math.abs(result)</code> may be less than dx if a boundary was reached.
+         */
+        //Boundaries reached makes no sense. so far...
+        //animations, swiping...
+        return dx;
     }
 
     private int getHorizontalSpace() {
