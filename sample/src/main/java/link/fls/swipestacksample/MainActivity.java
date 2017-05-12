@@ -70,11 +70,13 @@ public class MainActivity extends AppCompatActivity implements SwipeStack.SwipeS
 
         fillWithTestData();
 
-        ViewGroup outer = (ViewGroup) findViewById(R.id.outer);
-
+        SpecialLinearLayout outer = (SpecialLinearLayout) findViewById(R.id.outer);
+        outer.setSwipeStack(mSwipeStack);
+/*
 
         NestedScrollView scrollView = (NestedScrollView) findViewById(R.id.scrollView);
         scrollView.setNestedScrollingEnabled(false);
+        */
         // with no SLL this might work.
     }
 

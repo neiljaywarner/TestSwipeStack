@@ -69,18 +69,22 @@ public class SwipeHelper implements View.OnTouchListener {
                 return true;
 
             case MotionEvent.ACTION_MOVE:
-                Log.e("M11_SH", "move");
 
                 int pointerIndex = event.findPointerIndex(mPointerId);
                 if (pointerIndex < 0) return false;
 
                 float dx = event.getX(pointerIndex) - mDownX;
                 float dy = event.getY(pointerIndex) - mDownY;
+                Log.e("M11_SH", "move: dx/dy" + dx + "/" + dy);
+
 
                 float newX = mObservedView.getX() + dx;
                 float newY = mObservedView.getY() + dy;
                 float oldY = mObservedView.getY();
-
+                if (Math.abs(dy) > Math.abs(dx)) {
+                    Log.e("NJW", "distancey > distanceX");
+                    return false;
+                }
                 mObservedView.setX(newX);
                // mObservedView.setY(oldY);
 

@@ -88,15 +88,35 @@ public class SpecialLinearLayout extends LinearLayout {
         return true;
     }
 
-    /*
 
+    float mDispatchDownY;
+    SwipeStack mSwipeStack;
+
+    /*
+    @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        super.dispatchTouchEvent(ev);
-        if (handled) {
-            return true;
-        } else {
-            return false;
+        Log.e("NJW", "dispatchTouchEvent:" + MotionEvent.actionToString(ev.getAction()));
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mSwipeStack.setEnabled(true);
+                mDispatchDownY = ev.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float dy = Math.abs(ev.getY() - mDispatchDownY);
+                Log.e("NJW", "dy=" + dy);
+                if (dy > 20) {
+                    mSwipeStack.setEnabled(false);
+                    return false;
+                }
+                //todo batching if needed?
+
         }
+        return super.dispatchTouchEvent(ev);
     }
     */
+
+    public void setSwipeStack(SwipeStack swipeStack ) {
+        mSwipeStack = swipeStack;
+    }
+
 }

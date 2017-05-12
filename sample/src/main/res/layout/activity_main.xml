@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context="link.fls.swipestacksample.MainActivity">
 
-    <LinearLayout
+    <link.fls.swipestacksample.SpecialLinearLayout
         android:id="@+id/outer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -70,5 +70,5 @@
             android:background="@android:color/holo_green_light" />
 
 
-    </LinearLayout>
+    </link.fls.swipestacksample.SpecialLinearLayout>
 </android.support.v4.widget.NestedScrollView>
