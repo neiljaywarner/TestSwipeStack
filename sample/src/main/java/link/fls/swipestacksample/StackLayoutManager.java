@@ -127,7 +127,7 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
         final int leftLimit = 0;
         final int rightLimit = findRightLimit(); //a helper method to find the rightmost child's right side.
         //-----> TODO: Modify this
-        /*
+
         if(dx + horizontalScrollOffset < leftLimit){
             travel = horizontalScrollOffset;
             horizontalScrollOffset = leftLimit;
@@ -140,7 +140,7 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
             travel = dx;
             horizontalScrollOffset += dx;
         }
-        */
+
 
         fillVisibleChildren(recycler, 2);
         //requestLayout();
