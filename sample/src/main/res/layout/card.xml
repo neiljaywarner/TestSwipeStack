@@ -4,11 +4,13 @@
     android:layout_margin="8dp"
     android:background="@android:color/holo_blue_light"
     android:id="@+id/textViewCard"
-    android:layout_width="50dp"
+    android:layout_width="250dp"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="left"
     android:textSize="44sp"
     android:text="@string/dummy_text"/>
+
+<!-- this width gets ignored in our stackamanger ?? -->
 <!--
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"

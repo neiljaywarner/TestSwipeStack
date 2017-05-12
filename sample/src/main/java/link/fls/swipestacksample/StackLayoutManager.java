@@ -35,7 +35,6 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
 
 
     /// *** These values are with LinearLayoutManager horizontal orientation
-   //  trlb/74/247/74/976
 //
     /*74
 05-10 17:59:45.971 28610-28610/link.fls.swipestacksample E/NJW: 462
@@ -43,12 +42,26 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
             05-10 17:59:45.971 28610-28610/link.fls.swipestacksample E/NJW: 976
     */
 
+    // this is Left, Top, Right, Bottom
+    // Therefore 74 top, 976 bottom would stay the same for horizontal layout
+    // normally right and left would go forward by width+padding, e.g. commented out exaxmple
+    /*
     Rect[] layoutInfo = {
             new Rect(74,74,205,976),
             new Rect(247,74,378,976),
             new Rect(420,74,551,976),
             new Rect(593,74,724,976),
             new Rect(766,74,897,976)
+*/
+
+    //TODO: Switch to start + calculate
+    // ltrb, so offset is small
+    Rect[] layoutInfo = {
+            new Rect(74,74,305,976),
+            new Rect(114,74,345,976),
+            new Rect(154,74,385,976),
+            new Rect(194,74,425,976),
+            new Rect(234,74,465,976)
 
 
 
