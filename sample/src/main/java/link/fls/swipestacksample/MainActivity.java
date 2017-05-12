@@ -23,6 +23,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,11 +43,11 @@ import link.fls.swipestack.SwipeStack;
 public class MainActivity extends AppCompatActivity implements SwipeStack.SwipeStackListener, View.OnClickListener {
 
     private Button mButtonLeft, mButtonRight;
-    private FloatingActionButton mFab;
 
     private ArrayList<String> mData;
     private SwipeStack mSwipeStack;
     private SwipeStackAdapter mAdapter;
+    private boolean doDispatch = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +57,9 @@ public class MainActivity extends AppCompatActivity implements SwipeStack.SwipeS
         mSwipeStack = (SwipeStack) findViewById(R.id.swipeStack);
         mButtonLeft = (Button) findViewById(R.id.buttonSwipeLeft);
         mButtonRight = (Button) findViewById(R.id.buttonSwipeRight);
-        mFab = (FloatingActionButton) findViewById(R.id.fabAdd);
 
         mButtonLeft.setOnClickListener(this);
         mButtonRight.setOnClickListener(this);
-        mFab.setOnClickListener(this);
 
         mData = new ArrayList<>();
         mAdapter = new SwipeStackAdapter(mData);
@@ -68,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements SwipeStack.SwipeS
         mSwipeStack.setListener(this);
 
         fillWithTestData();
+
+        ViewGroup outer = (ViewGroup) findViewById(R.id.outer);
     }
 
     private void fillWithTestData() {
@@ -97,8 +98,22 @@ If you use GestureDetector inside your Activity's dispatchTouchEvent() method yo
 
      */
 
-    float mDownX,mDownY;
+    float mDown;
+    /*
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        final GestureDetector myG;
 
+        if (doDispatch) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    */
+
+    float mDownX,mDownY;
+/*
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         Log.e("NJW", "Fixing to dispatch:" + MotionEvent.actionToString(ev.getAction()));
@@ -124,6 +139,7 @@ If you use GestureDetector inside your Activity's dispatchTouchEvent() method yo
 
         return super.dispatchTouchEvent(ev);
     }
+    */
 
     @Override
     public void onClick(View v) {
@@ -131,9 +147,6 @@ If you use GestureDetector inside your Activity's dispatchTouchEvent() method yo
             mSwipeStack.swipeTopViewToLeft();
         } else if (v.equals(mButtonRight)) {
             mSwipeStack.swipeTopViewToRight();
-        } else if (v.equals(mFab)) {
-            mData.add(getString(R.string.dummy_fab));
-            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -150,7 +163,6 @@ If you use GestureDetector inside your Activity's dispatchTouchEvent() method yo
         switch (item.getItemId()) {
             case R.id.menuReset:
                 mSwipeStack.resetStack();
-                Snackbar.make(mFab, R.string.stack_reset, Snackbar.LENGTH_SHORT).show();
                 return true;
             case R.id.menuGitHub:
                 Intent browserIntent = new Intent(

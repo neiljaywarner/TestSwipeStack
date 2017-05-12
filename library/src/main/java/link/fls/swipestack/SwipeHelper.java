@@ -46,14 +46,16 @@ public class SwipeHelper implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.e("NJW", "SwipeHelper.Event=" + MotionEvent.actionToString(event.getAction()));
+        Log.e("WJN", "SwipeHelper.Event=" + MotionEvent.actionToString(event.getAction()));
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                Log.e("M11_SH", "down ");
+
                 if(!mListenForTouchEvents || !mSwipeStack.isEnabled()) {
                     return false;
                 }
 
-                v.getParent().requestDisallowInterceptTouchEvent(true);
+                //v.getParent().requestDisallowInterceptTouchEvent(true);
                 mSwipeStack.onSwipeStart();
                 mPointerId = event.getPointerId(0);
                 mDownX = event.getX(mPointerId);
@@ -62,6 +64,8 @@ public class SwipeHelper implements View.OnTouchListener {
                 return true;
 
             case MotionEvent.ACTION_MOVE:
+                Log.e("M11_SH", "move");
+
                 int pointerIndex = event.findPointerIndex(mPointerId);
                 if (pointerIndex < 0) return false;
 
@@ -70,9 +74,10 @@ public class SwipeHelper implements View.OnTouchListener {
 
                 float newX = mObservedView.getX() + dx;
                 float newY = mObservedView.getY() + dy;
+                float oldY = mObservedView.getY();
 
                 mObservedView.setX(newX);
-                mObservedView.setY(newY);
+               // mObservedView.setY(oldY);
 
                 float dragDistanceX = newX - mInitialX;
                 float swipeProgress = Math.min(Math.max(
@@ -93,11 +98,17 @@ public class SwipeHelper implements View.OnTouchListener {
                 return true;
 
             case MotionEvent.ACTION_UP:
-                v.getParent().requestDisallowInterceptTouchEvent(false);
+                //v.getParent().requestDisallowInterceptTouchEvent(false);
                 mSwipeStack.onSwipeEnd();
                 checkViewPosition();
 
                 return true;
+
+            case MotionEvent.ACTION_CANCEL:
+                Log.e("M11_SH", "cancel");
+
+                return false;
+
 
         }
 
