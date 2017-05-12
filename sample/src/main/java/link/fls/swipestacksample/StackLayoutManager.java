@@ -59,8 +59,8 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
         fillVisibleChildren(recycler, 0);
     }
    // when scorlling, change pos plus or minus... maybe record it in a member variable
-    public void fillVisibleChildren(RecyclerView.Recycler recycler, int top) {
-        Log.d(TAG, "fill start with:" + top);
+    public void fillVisibleChildren(RecyclerView.Recycler recycler, int startCardIndex) {
+        Log.d(TAG, "fill start with:" + startCardIndex);
         //before we layout child views, we first scrap all current attached views
 
         detachAndScrapAttachedViews(recycler);
@@ -68,13 +68,24 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
         //layoutInfo is a Rect[], each element contains coordinates for a view.
 
         //TODO: Change to do while so it can circle around
-        for(int i = top; i < layoutInfo.length; i++){
-            if(isVisible(i)){
-                View view = recycler.getViewForPosition(i);
-                addView(view);
-                layoutDecorated(view, layoutInfo[i].left, layoutInfo[i].top - verticalScrollOffset,
-                        layoutInfo[i].right, layoutInfo[i].bottom - verticalScrollOffset);
+        // if top is 0, order shoudl be 0,1,2,3,4
+        // if top is 1, order shoudl be 1,2,3,4,0
+        // i ftop is 2, order should be 2,3,4,0,1
+        // considerr circular queue data structure
+        int cardIndex = startCardIndex;
+        for(int layoutIndex = 0; layoutIndex < layoutInfo.length; layoutIndex++){
+            //e.g. count through all elements
+            if (cardIndex == layoutInfo.length) {
+                // if it started at 1, then go round the world.
+                cardIndex = 0;
             }
+            if(isVisible(cardIndex)){
+                View view = recycler.getViewForPosition(cardIndex);
+                addView(view);
+                layoutDecorated(view, layoutInfo[layoutIndex].left, layoutInfo[layoutIndex].top - verticalScrollOffset,
+                        layoutInfo[layoutIndex].right, layoutInfo[layoutIndex].bottom - verticalScrollOffset);
+            }
+            cardIndex++;
 
 
         }
@@ -108,6 +119,7 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
 
     @Override
     public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        Log.e("NJW", "in scrollHorizontallyby");
         Log.d(TAG, "dx=" + dx);
         if (dx < 0) {
             Log.d(TAG, "scrolling left");
@@ -126,20 +138,6 @@ public class StackLayoutManager extends RecyclerView.LayoutManager{
         int travel;
         final int leftLimit = 0;
         final int rightLimit = findRightLimit(); //a helper method to find the rightmost child's right side.
-        //-----> TODO: Modify this
-
-        if(dx + horizontalScrollOffset < leftLimit){
-            travel = horizontalScrollOffset;
-            horizontalScrollOffset = leftLimit;
-        }
-        else if(dx + horizontalScrollOffset + getHorizontalSpace() > rightLimit){
-            travel = rightLimit - horizontalScrollOffset - getHorizontalSpace();
-            horizontalScrollOffset = rightLimit - getHorizontalSpace();
-        }
-        else{
-            travel = dx;
-            horizontalScrollOffset += dx;
-        }
 
 
         fillVisibleChildren(recycler, 2);
