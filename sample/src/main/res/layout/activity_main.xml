@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clipChildren="false"
+    android:id="@+id/scrollView"
+    android:orientation="vertical"
     tools:context="link.fls.swipestacksample.MainActivity">
 
-    <link.fls.swipestacksample.SpecialLinearLayout
+    <LinearLayout
         android:id="@+id/outer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -52,7 +54,8 @@
             android:layout_height="400dp"
             android:layout_above="@+id/buttonSwipeLeft"
             android:padding="@dimen/padding_swipestack"
-            app:stack_rotation="10"
+            app:stack_rotation="0"
+            app:swipe_rotation="0"
             app:stack_size="3" />
 
 
@@ -67,5 +70,5 @@
             android:background="@android:color/holo_green_light" />
 
 
-    </link.fls.swipestacksample.SpecialLinearLayout>
-</ScrollView>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

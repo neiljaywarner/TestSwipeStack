@@ -17,6 +17,7 @@
 package link.fls.swipestack;
 
 import android.animation.Animator;
+import android.os.Build;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,7 +47,9 @@ public class SwipeHelper implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.e("WJN", "SwipeHelper.Event=" + MotionEvent.actionToString(event.getAction()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Log.e("WJNM11", "SwipeHelper.Event=" + MotionEvent.actionToString(event.getAction()));
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.e("M11_SH", "down ");
@@ -55,7 +58,9 @@ public class SwipeHelper implements View.OnTouchListener {
                     return false;
                 }
 
-                //v.getParent().requestDisallowInterceptTouchEvent(true);
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                // a-ha!  these lines are the ones that make it work with the smoothnesss.
+
                 mSwipeStack.onSwipeStart();
                 mPointerId = event.getPointerId(0);
                 mDownX = event.getX(mPointerId);
@@ -98,7 +103,8 @@ public class SwipeHelper implements View.OnTouchListener {
                 return true;
 
             case MotionEvent.ACTION_UP:
-                //v.getParent().requestDisallowInterceptTouchEvent(false);
+                v.getParent().requestDisallowInterceptTouchEvent(false);
+                // a-ha!  these lines are the ones that make it work!
                 mSwipeStack.onSwipeEnd();
                 checkViewPosition();
 
@@ -137,6 +143,7 @@ public class SwipeHelper implements View.OnTouchListener {
     }
 
     private void resetViewPosition() {
+        Log.e("m11NJW", "********** RESETTING*****");
         mObservedView.animate()
                 .x(mInitialX)
                 .y(mInitialY)
